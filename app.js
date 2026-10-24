@@ -54,5 +54,3 @@ const contactForm=document.querySelector('#contact-form');if(contactForm){contac
   }).join('');
  }catch(e){console.warn('Médias non chargés',e);}
 })();
-
-const playerPanel=document.querySelector('.player');audio.addEventListener('play',()=>playerPanel?.classList.add('is-playing'));audio.addEventListener('pause',()=>playerPanel?.classList.remove('is-playing'));audio.addEventListener('ended',()=>playerPanel?.classList.remove('is-playing'));
