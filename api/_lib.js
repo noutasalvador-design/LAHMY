@@ -24,7 +24,7 @@ async function admin(req) {
   if (!match) return false;
   try {
     const { payload } = await jwtVerify(decodeURIComponent(match[1]), secret());
-    return payload.role === 'admin' && payload.email === process.env.ADMIN_EMAIL;
+    return payload.role === 'admin' && String(payload.email).toLowerCase() === String(process.env.ADMIN_EMAIL || '').trim().toLowerCase();
   } catch { return false; }
 }
 function method(req, res, allowed) {
