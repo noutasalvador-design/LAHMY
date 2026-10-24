@@ -38,6 +38,10 @@ const contactForm=document.querySelector('#contact-form');if(contactForm){contac
   const response=await fetch('/api/content');
   if(response.ok){
    const data=(await response.json()).content||{};
+   const heroPhoto=document.querySelector('.hero-photo .photo-frame img');
+   const artistPhoto=document.querySelector('.artist-photo img');
+   if(heroPhoto&&typeof data.hero_photo_url==='string'&&/^https:\/\//i.test(data.hero_photo_url))heroPhoto.src=data.hero_photo_url;
+   if(artistPhoto&&typeof data.artist_photo_url==='string'&&/^https:\/\//i.test(data.artist_photo_url))artistPhoto.src=data.artist_photo_url;
    const bio=document.querySelector('.bio-copy');
    if(bio){if(data.bio_fr){bio.dataset.fr=data.bio_fr;}if(data.bio_en){bio.dataset.en=data.bio_en;}bio.textContent=(typeof lang!=='undefined'&&lang==='en'&&data.bio_en)?data.bio_en:(data.bio_fr||bio.dataset.fr||bio.textContent);}
   }
