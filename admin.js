@@ -18,7 +18,7 @@ async function refresh() {
     const state=await api('/api/auth/me');
     $('#login-panel').classList.toggle('hidden',state.authenticated);
     $('#dashboard').classList.toggle('hidden',!state.authenticated);
-    $('#setup-warning').classList.toggle('hidden',state.authenticated);
+    const setupWarning=$('#setup-warning');if(setupWarning)setupWarning.classList.toggle('hidden',state.authenticated);
     if(!state.authenticated){say('#setup-status','Le serveur attend DATABASE_URL, ADMIN_EMAIL, ADMIN_PASSWORD_HASH, SESSION_SECRET et BLOB_READ_WRITE_TOKEN dans les variables Vercel.');return;}
     const {releases}=await api('/api/releases');
     $('#release-admin').innerHTML=releases.length?releases.map(r=>'<div class="release-row"><div><strong>'+esc(r.title)+'</strong><small>'+esc(r.release_type)+' · '+(r.published?'Publié':'Brouillon')+' · piste '+r.track_number+'</small></div><div><button type="button" data-pub="'+r.id+'">'+(r.published?'DÉPUBLIER':'PUBLIER')+'</button><button type="button" data-del="'+r.id+'">SUPPRIMER</button></div></div>').join(''):'Aucune sortie pour le moment.';
@@ -99,17 +99,3 @@ document.querySelectorAll('.admin-tab[data-view]').forEach(button=>button.addEve
 
 $('#reels-form').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget),url=String(f.get('reel_url')||'').trim(),title=String(f.get('reel_title')||'').trim();let parsed;try{parsed=new URL(url);}catch{say('#reels-status','Collez un lien valide.');return;}const host=parsed.hostname.toLowerCase().replace(/^www\./,'');if(!['youtube.com','m.youtube.com','youtu.be','instagram.com','tiktok.com'].some(d=>host===d||host.endsWith('.'+d))){say('#reels-status','Lien non pris en charge. Utilisez YouTube Shorts, Instagram Reels ou TikTok.');return;}try{const current=await api('/api/content'),list=parseReels(current.content.reels_json);if(list.some(r=>r.url===url)){say('#reels-status','Ce lien est déjà enregistré.');return;}list.push({url,title:title||'LAHMY · Reel / Short'});await saveReels(list,'Reel enregistré. Il apparaîtra sur le site après actualisation.');e.currentTarget.reset();}catch(err){say('#reels-status','Échec : '+err.message);}});
 
-
-// Export CSV des statistiques pour archivage ou partage.
-$('#export-stats').addEventListener('click',async()=>{
- const button=$('#export-stats');button.disabled=true;say('#stats-status','Préparation du fichier CSV…');
- try{
-  const data=await api('/api/events');
-  const totals=Object.fromEntries((data.totals||[]).map(x=>[x.event_type,x.total]));
-  const rows=[['Type','Titre','Nombre'],['Écoutes','Tous les titres',Number(totals.play||0)],['Téléchargements','Tous les titres',Number(totals.download||0)]];
-  (data.tracks||[]).forEach(t=>{rows.push(['Écoutes',t.title,Number(t.plays||0)]);rows.push(['Téléchargements',t.title,Number(t.downloads||0)]);});
-  const csv='\\uFEFF'+rows.map(row=>row.map(value=>'"'+String(value??'').replace(/"/g,'""')+'"').join(';')).join('\\r\\n');
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),link=document.createElement('a');
-  link.href=url;link.download='lahmy-statistiques-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);say('#stats-status','Export CSV préparé.');
- }catch(err){say('#stats-status','Échec de l’export : '+err.message);}finally{button.disabled=false;}
-});
