@@ -8,7 +8,7 @@ module.exports = async function handler(req,res) {
    return send(res,200,{content:Object.fromEntries(rows.map(r=>[r.key,r.value]))});
   }
   if(!(await admin(req)))return send(res,401,{error:'Connexion administrateur requise.'});
-  const b=req.body||{},allowed=['bio_fr','bio_en','news_fr','news_en','hero_photo_url','artist_photo_url','music_cover_url'];
+  const b=req.body||{},allowed=['bio_fr','bio_en','news_fr','news_en','hero_photo_url','artist_photo_url','music_cover_url','reels_json'];
   const saved={};
   for(const key of allowed){if(typeof b[key]==='string'){const value=b[key].slice(0,5000);await sql`insert into site_content(key,value,updated_at) values(${key},${value},now()) on conflict(key) do update set value=excluded.value,updated_at=now()`;saved[key]=value;}}
   return send(res,200,{ok:true,content:saved});
