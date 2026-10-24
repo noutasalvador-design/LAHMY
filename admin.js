@@ -87,7 +87,7 @@ $('#photos-form').addEventListener('submit',async e=>{
 });
 
 /* Navigation par panneaux : les formulaires existants restent connectés à leurs fonctions. */
-const adminTitles={'view-release':'Nouvelle sortie','view-catalog':'Catalogue musical','view-photos':'Photos du site','view-bio':'Biographie','view-media':'Médias & actualités','view-stats':'Statistiques'};
+const adminTitles={'view-release':'Nouvelle sortie','view-catalog':'Catalogue musical','view-photos':'Photos du site','view-bio':'Biographie','view-media':'Médias & actualités','view-reels':'Reels / YouTube Shorts','view-stats':'Statistiques'};
 document.querySelectorAll('.admin-tab[data-view]').forEach(button=>button.addEventListener('click',()=>{
  const target=button.dataset.view;
  document.querySelectorAll('.admin-tab').forEach(item=>item.classList.toggle('active',item===button));
