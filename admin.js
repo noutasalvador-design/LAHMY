@@ -24,9 +24,10 @@ async function refresh() {
     const contentData=await api('/api/content');
     const cf=$('#content-form');
     if(cf&&!cf.dataset.loaded){cf.elements.bio_fr.value=contentData.content.bio_fr||'';cf.elements.bio_en.value=contentData.content.bio_en||'';cf.dataset.loaded='1';}
-    const heroPreview=$('#hero-photo-preview'),artistPreview=$('#artist-photo-preview');
+    const heroPreview=$('#hero-photo-preview'),artistPreview=$('#artist-photo-preview'),musicCoverPreview=$('#music-cover-preview');
     if(heroPreview&&contentData.content.hero_photo_url)heroPreview.src=contentData.content.hero_photo_url;
     if(artistPreview&&contentData.content.artist_photo_url)artistPreview.src=contentData.content.artist_photo_url;
+    if(musicCoverPreview&&contentData.content.music_cover_url)musicCoverPreview.src=contentData.content.music_cover_url;
     const mediaData=await api('/api/media');
     $('#media-admin').innerHTML=(mediaData.posts||[]).map(p=>'<div class="release-row"><div><strong>'+esc(p.title)+'</strong><small>'+esc(p.kind)+' · '+(p.published?'Publié':'Brouillon')+'</small></div><div><button type="button" data-media-pub="'+p.id+'">'+(p.published?'DÉPUBLIER':'PUBLIER')+'</button><button type="button" data-media-del="'+p.id+'">SUPPRIMER</button></div></div>').join('')||'Aucun contenu média.';
     $('#media-admin').querySelectorAll('[data-media-pub]').forEach(b=>b.addEventListener('click',async()=>{try{const p=mediaData.posts.find(x=>x.id===b.dataset.mediaPub);await api('/api/media/'+p.id,{method:'PATCH',body:JSON.stringify({published:!p.published})});await refresh();}catch(e){say('#media-status',e.message);}}));
@@ -59,9 +60,9 @@ $('#media-form').addEventListener('submit',async e=>{e.preventDefault();const fo
 
 $('#photos-form').addEventListener('submit',async e=>{
  e.preventDefault();
- const form=e.currentTarget,hero=form.elements.hero_photo.files[0],artist=form.elements.artist_photo.files[0];
- if(!hero&&!artist){say('#photos-status','Choisissez au moins une photo à remplacer.');return;}
- for(const file of [hero,artist].filter(Boolean)){
+ const form=e.currentTarget,hero=form.elements.hero_photo.files[0],artist=form.elements.artist_photo.files[0],musicCover=form.elements.music_cover.files[0];
+ if(!hero&&!artist&&!musicCover){say('#photos-status','Choisissez au moins une photo à remplacer.');return;}
+ for(const file of [hero,artist,musicCover].filter(Boolean)){
   if(!['image/jpeg','image/png','image/webp','image/avif'].includes(file.type)){say('#photos-status','Format refusé : utilisez JPG, PNG, WEBP ou AVIF.');return;}
   if(file.size>10*1024*1024){say('#photos-status','Chaque photo doit faire 10 Mo maximum.');return;}
  }
@@ -74,6 +75,7 @@ $('#photos-form').addEventListener('submit',async e=>{
   await api('/api/content',{method:'PATCH',body:JSON.stringify(updates)});
   if(updates.hero_photo_url)$('#hero-photo-preview').src=updates.hero_photo_url;
   if(updates.artist_photo_url)$('#artist-photo-preview').src=updates.artist_photo_url;
+   if(updates.music_cover_url)$('#music-cover-preview').src=updates.music_cover_url;
   form.reset();
   say('#photos-status','Photos enregistrées ! Elles seront visibles sur le site après actualisation.');
  }catch(err){say('#photos-status','Échec : '+err.message);}
