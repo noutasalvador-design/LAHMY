@@ -39,3 +39,45 @@
 .cover{background:#151515;display:block;min-height:350px;}
 .cover:after,.cover-grid,.cover>span{display:none!important;}
 .cover img{display:block;position:absolute;inset:0;width:100%;height:100%;max-height:none;object-fit:cover;filter:none;mix-blend-mode:normal;z-index:1;}
+
+/* Palette premium + thème clair/sombre */
+:root{color-scheme:dark;--bg:#0c1018;--panel:#141b28;--fg:#f5f6fb;--muted:#a6b0c2;--line:#30394b;--acid:#c8f169;--accent:#67d8d0;--display:'Barlow Condensed',Impact,sans-serif;--body:'DM Sans',Arial,sans-serif}
+body{background:radial-gradient(ellipse at 78% 10%,#172335 0,transparent 38%),var(--bg);color:var(--fg);transition:background .35s,color .35s}
+.top{background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px);border-color:var(--line)}
+nav a,.underlink,.social-link,.socials a,.controls>a{transition:color .2s}
+.theme-toggle{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--acid);font-size:20px;display:grid;place-items:center;cursor:pointer;transition:transform .25s,background .25s;box-shadow:0 5px 18px #0002}
+.theme-toggle:hover{transform:rotate(18deg) scale(1.06);background:var(--line)}
+.button{border-radius:6px;background:linear-gradient(110deg,var(--acid),#a8e66b);box-shadow:0 9px 24px #c8f1691c;transition:transform .22s,box-shadow .22s}
+.button:hover{transform:translateY(-3px);box-shadow:0 14px 30px #c8f16930}
+.hero{background:linear-gradient(120deg,#111927 0%,transparent 68%)}
+.hero:before{color:#151f2e}
+.stroke{-webkit-text-stroke-color:#8b9bb1}
+.photo-frame{border-color:#657187;box-shadow:20px 20px 0 #c8f16916,0 24px 70px #0005}
+.section-heading h2,.artist-copy h2,.contact h2{letter-spacing:-.035em}
+.section-heading h2 em,.artist-copy h2 em,.contact h2 em{color:var(--accent)}
+.music,.videos{background:linear-gradient(145deg,var(--panel),var(--bg));}
+.cover{background:linear-gradient(135deg,#c8f169,#67d8d0);border-radius:8px}
+.player{border-radius:8px;border-color:var(--line);box-shadow:0 20px 55px #0002}
+.track button,.controls .play2{background:linear-gradient(135deg,var(--acid),#9ee8a7)}
+.artist-photo{border-radius:8px;border:1px solid var(--line);box-shadow:18px 18px 0 #67d8d012}
+.contact-form input,.contact-form textarea{border-radius:6px}
+footer{border-color:var(--line)}
+html[data-theme="light"]{color-scheme:light;--bg:#f3f6fb;--panel:#fff;--fg:#172033;--muted:#59657a;--line:#d7deea;--acid:#3c6b13;--accent:#007d83}
+html[data-theme="light"] body{background:radial-gradient(ellipse at 78% 10%,#dbe9f4 0,transparent 42%),var(--bg);color:var(--fg)}
+html[data-theme="light"] .top{background:color-mix(in srgb,var(--bg) 90%,transparent)}
+html[data-theme="light"] .logo-mark{background:#c8f169;color:#172033}
+html[data-theme="light"] nav a{color:#3d4a60}
+html[data-theme="light"] .hero{background:linear-gradient(120deg,#e5edf6 0%,transparent 70%)}
+html[data-theme="light"] .hero:before{color:#e7edf5}
+html[data-theme="light"] .stroke{-webkit-text-stroke-color:#5e6d84}
+html[data-theme="light"] .intro,html[data-theme="light"] .section-heading>p,html[data-theme="light"] .artist-copy>p:not(.eyebrow),html[data-theme="light"] .contact-info>p{color:#4d5a70}
+html[data-theme="light"] .music,html[data-theme="light"] .videos{background:linear-gradient(145deg,#e7edf5,#f3f6fb)}
+html[data-theme="light"] .player{background:#fff}
+html[data-theme="light"] .player-top,html[data-theme="light"] .catalog-foot{border-color:#d7deea}
+html[data-theme="light"] .player-top span:first-child,html[data-theme="light"] .track strong{color:#172033}
+html[data-theme="light"] .track small,html[data-theme="light"] .hint,html[data-theme="light"] .catalog-foot,html[data-theme="light"] .videonote{color:#68758b}
+html[data-theme="light"] .socials a{color:#344159}
+html[data-theme="light"] .contact-form input,html[data-theme="light"] .contact-form textarea{background:#fff;border-color:#c8d2e2;color:#172033}
+html[data-theme="light"] .contact-info .whatsapp-link{border-color:#c8d2e2}
+html[data-theme="light"] .admin{color:var(--accent)}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
