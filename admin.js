@@ -80,3 +80,12 @@ $('#photos-form').addEventListener('submit',async e=>{
   say('#photos-status','Photos enregistrées ! Elles seront visibles sur le site après actualisation.');
  }catch(err){say('#photos-status','Échec : '+err.message);}
 });
+
+/* Navigation par panneaux : les formulaires existants restent connectés à leurs fonctions. */
+const adminTitles={'view-release':'Nouvelle sortie','view-catalog':'Catalogue musical','view-photos':'Photos du site','view-bio':'Biographie','view-media':'Médias & actualités','view-stats':'Statistiques'};
+document.querySelectorAll('.admin-tab[data-view]').forEach(button=>button.addEventListener('click',()=>{
+ const target=button.dataset.view;
+ document.querySelectorAll('.admin-tab').forEach(item=>item.classList.toggle('active',item===button));
+ document.querySelectorAll('[data-admin-view]').forEach(panel=>panel.classList.toggle('active',panel.id===target));
+ const title=document.querySelector('#admin-view-title');if(title)title.textContent=adminTitles[target]||'Administration';
+}));
