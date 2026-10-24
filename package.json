@@ -5,12 +5,11 @@
   "description": "Site officiel LAHMY — Vercel, Neon et Vercel Blob",
   "scripts": {
     "dev": "vercel dev",
-    "check": "node --check api/_lib.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/releases/index.js && node --check api/releases/[id].js && node --check api/upload.js && node --check app.js && node --check admin.js"
+    "check": "node --check api/_lib.js && node --check api/auth/login.js && node --check api/auth/me.js && node --check api/auth/logout.js && node --check api/releases/index.js && node --check 'api/releases/[id].js' && node --check api/events.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
     "@vercel/blob": "^1.1.1",
-    "@vercel/blob/client": "^1.1.1",
     "bcryptjs": "^3.0.2",
     "jose": "^6.1.0"
   },
