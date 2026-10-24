@@ -9,11 +9,13 @@ module.exports = async function handler(req,res) {
       onBeforeGenerateToken: async (pathname, clientPayload) => {
         if (!(await admin(req))) throw new Error('Connexion administrateur requise.');
         const payload = JSON.parse(clientPayload || '{}');
-        const kind = payload.kind === 'cover' ? 'cover' : 'audio';
+        const kind = ['cover','media'].includes(payload.kind) ? payload.kind : 'audio';
         const ext = String(pathname).split('.').pop().toLowerCase();
         const allowed = kind === 'cover'
           ? ['image/jpeg','image/png','image/webp']
-          : ['audio/mpeg','audio/mp3','audio/wav','audio/ogg','audio/mp4','audio/aac'];
+          : kind === 'media'
+            ? ['image/jpeg','image/png','image/webp','video/mp4','video/webm','video/quicktime']
+            : ['audio/mpeg','audio/mp3','audio/wav','audio/ogg','audio/mp4','audio/aac'];
         return {
           allowedContentTypes: allowed,
           maximumSizeInBytes: kind === 'cover' ? 10*1024*1024 : 100*1024*1024,
