@@ -1,4 +1,5 @@
 const { db, send, admin, method } = require('../_lib');
+const { del } = require('@vercel/blob');
 module.exports = async function handler(req,res) {
   if (!method(req,res,['PATCH','DELETE'])) return;
   if (!(await admin(req))) return send(res,401,{error:'Connexion administrateur requise.'});
@@ -7,6 +8,10 @@ module.exports = async function handler(req,res) {
   try {
     const sql=db();
     if (req.method==='DELETE') {
+      const found=await sql`select audio_url,cover_url from releases where id=${id}`;
+      if (!found.length) return send(res,404,{error:'Sortie introuvable.'});
+      const urls=[found[0].audio_url,found[0].cover_url].filter(Boolean);
+      if (urls.length) { try { await del(urls); } catch(e) { console.warn('Blob cleanup:',e.message); } }
       await sql`delete from releases where id=${id}`;
       return send(res,200,{ok:true});
     }
