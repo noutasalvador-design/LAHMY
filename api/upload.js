@@ -3,7 +3,7 @@ const { admin } = require('./_lib');
 module.exports = async function handler(req,res) {
   if (req.method !== 'POST') { res.setHeader('Allow','POST'); return res.status(405).json({error:'Méthode non autorisée.'}); }
   try {
-    return await handleUpload({
+    const jsonResponse = await handleUpload({
       body: req.body,
       request: req,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
@@ -24,6 +24,7 @@ module.exports = async function handler(req,res) {
       },
       onUploadCompleted: async () => {}
     });
+    return res.status(200).json(jsonResponse);
   } catch(e) {
     console.error('LAHMY upload:',e.message);
     return res.status(400).json({error:'Téléversement refusé. Vérifiez la connexion admin et le stockage Vercel Blob.'});
