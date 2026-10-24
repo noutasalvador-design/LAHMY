@@ -7,3 +7,21 @@
 
 /* Biography, photo/video gallery and editorial cards */
 .media-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:30px}.media-card{border:1px solid var(--line);background:var(--panel);min-width:0}.media-card img,.media-card video{display:block;width:100%;max-height:360px;aspect-ratio:4/3;object-fit:cover;background:#090909}.media-card-copy{padding:17px}.media-card-copy small{font-size:9px;letter-spacing:1.5px;color:var(--acid);font-weight:800}.media-card-copy h3{font:700 23px var(--display);margin:9px 0}.media-card-copy p{color:var(--muted);font-size:12px;line-height:1.7}.admin-card textarea{width:100%;resize:vertical}.admin-card button{margin-top:4px}.admin-card .release-row button{background:transparent;color:var(--fg);border:1px solid #555}.admin-card .release-row button:hover{background:var(--acid);color:#111}
+
+
+/* YouTube Short intégré + correction du visuel principal sur ordinateur */
+.hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}
+.hero-copy,.hero-photo{min-width:0}
+.photo-frame{flex:none;isolation:isolate}
+.photo-frame img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;z-index:2}
+.video-feature{display:grid;grid-template-columns:minmax(0,1fr) 300px;align-items:center;gap:clamp(24px,5vw,70px);padding:clamp(24px,5vw,64px);border:1px solid #343434;background:radial-gradient(ellipse at 15% 20%,#242824 0,#171717 52%,#101010 100%);position:relative;overflow:hidden}
+.video-feature:before{content:'LAHMY';position:absolute;left:-12px;bottom:-48px;font:900 clamp(100px,19vw,250px)/.8 var(--display);color:#202220;pointer-events:none}
+.video-feature-copy{position:relative;z-index:1;max-width:500px}
+.video-kicker{color:var(--acid);font-size:9px;letter-spacing:2px;font-weight:800}
+.video-feature-copy h3{font:800 clamp(36px,5vw,68px)/.95 var(--display);text-transform:uppercase;margin:20px 0}
+.video-feature-copy p{max-width:360px;color:#aaa;line-height:1.8;font-size:12px}
+.video-open{display:inline-block;margin-top:18px;padding:13px 15px;border:1px solid #555;color:var(--acid);font-size:9px;letter-spacing:1px;font-weight:800}
+.video-open:hover{background:var(--acid);color:#111;border-color:var(--acid)}
+.video-player-wrap{position:relative;z-index:1;width:100%;max-width:300px;justify-self:center;aspect-ratio:9/16;background:#080808;border:1px solid #454545;box-shadow:0 20px 60px #0008;overflow:hidden}
+.video-player-wrap iframe{display:block;width:100%;height:100%;border:0}
+@media(max-width:760px){.video-feature{grid-template-columns:1fr;gap:30px;padding:28px 20px}.video-feature-copy h3{font-size:clamp(38px,10vw,56px)}.video-player-wrap{width:min(100%,320px);max-width:320px}.hero{grid-template-columns:minmax(0,1fr)}.hero-photo{width:100%;min-width:0}}
