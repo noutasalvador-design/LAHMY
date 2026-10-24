@@ -81,3 +81,7 @@ html[data-theme="light"] .contact-form input,html[data-theme="light"] .contact-f
 html[data-theme="light"] .contact-info .whatsapp-link{border-color:#c8d2e2}
 html[data-theme="light"] .admin{color:var(--accent)}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+
+/* Crédits et contact du développeur dans le pied de page */
+.footer-credit{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:11px;line-height:1.7;letter-spacing:.04em;color:var(--muted,#a7b0bd)}.footer-credit strong{color:var(--text,#fff);font-weight:800}.footer-credit a{color:var(--accent,#c8f169);text-decoration:none;transition:color .2s ease}.footer-credit a:hover{color:var(--text,#fff)}footer{gap:20px;flex-wrap:wrap}@media(max-width:680px){.footer-credit{order:3;width:100%;padding-top:8px}.footer-credit span:last-child{max-width:100%;overflow-wrap:anywhere}footer{justify-content:center;text-align:center}}
