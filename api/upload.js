@@ -11,13 +11,9 @@ module.exports = async function handler(req,res) {
         const payload = JSON.parse(clientPayload || '{}');
         const kind = ['cover','media'].includes(payload.kind) ? payload.kind : 'audio';
         const ext = String(pathname).split('.').pop().toLowerCase();
-        const allowed = kind === 'cover'
-          ? ['image/jpeg','image/png','image/webp']
-          : kind === 'media'
-            ? ['image/jpeg','image/png','image/webp','video/mp4','video/webm','video/quicktime']
-            : ['audio/mpeg','audio/mp3','audio/wav','audio/ogg','audio/mp4','audio/aac','video/mp4','video/webm','video/quicktime'];
         return {
-          allowedContentTypes: allowed,
+          // Omit allowedContentTypes so Blob accepts any MIME type.
+          // The admin UI still guides users to choose the right media field.
           maximumSizeInBytes: kind === 'cover' ? 10*1024*1024 : 100*1024*1024,
           tokenPayload: JSON.stringify({kind,admin:true,ext})
         };
