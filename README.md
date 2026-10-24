@@ -41,7 +41,7 @@ Site officiel responsive de LAHMY, artiste auteur-compositeur-interprète origin
 - Les API de gestion et de téléversement exigent une session administrateur.
 - Ne partage pas la chaîne Neon, le jeton Blob ou le mot de passe.
 - Les statistiques d'écoute/téléchargement sont indicatives : elles sont envoyées par le navigateur et ne constituent pas une mesure anti-fraude.
-- Les éléments éditables de biographie, galerie, actualités et vidéos ne sont pas encore reliés à l'admin ; la gestion musicale est la première partie connectée.
+- Les contenus biographiques et les posts photo/vidéo/actualité/événement sont gérés via l'admin et publiés sur le site lorsqu'ils sont marqués comme publiés.
 - Le formulaire de contact utilise `mailto:` ; il n'envoie pas de courrier depuis un serveur.
 
 ## Vérification et limites
