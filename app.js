@@ -60,3 +60,13 @@ const contactForm=document.querySelector('#contact-form');if(contactForm){contac
   }).join('');
  }catch(e){console.warn('Médias non chargés',e);}
 })();
+
+/* Thème mémorisé localement sur l'appareil, sans toucher aux contenus du site. */
+(function(){
+ const root=document.documentElement,button=document.querySelector('#theme-toggle');
+ if(!button)return;
+ let saved='dark';try{saved=localStorage.getItem('lahmy-theme')||'dark'}catch(e){}
+ function apply(theme){const light=theme==='light';root.dataset.theme=light?'light':'dark';button.textContent=light?'☾':'☼';button.setAttribute('aria-label',light?'Activer le mode sombre':'Activer le mode clair');button.title=light?'Mode sombre':'Mode clair';}
+ apply(saved);
+ button.addEventListener('click',()=>{const next=root.dataset.theme==='light'?'dark':'light';apply(next);try{localStorage.setItem('lahmy-theme',next)}catch(e){}});
+})();
