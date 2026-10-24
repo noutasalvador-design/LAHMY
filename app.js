@@ -30,3 +30,27 @@ const contactForm=document.querySelector('#contact-form');if(contactForm){contac
   });
  }catch(e){console.warn('Catalogue momentanément indisponible',e);}
 })();
+
+/* Editable biography and published media/news from Neon. */
+(async function loadArtistContent(){
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ try{
+  const response=await fetch('/api/content');
+  if(response.ok){
+   const data=(await response.json()).content||{};
+   const bio=document.querySelector('.bio-copy');
+   if(bio){if(data.bio_fr){bio.dataset.fr=data.bio_fr;}if(data.bio_en){bio.dataset.en=data.bio_en;}bio.textContent=(typeof lang!=='undefined'&&lang==='en'&&data.bio_en)?data.bio_en:(data.bio_fr||bio.dataset.fr||bio.textContent);}
+  }
+ }catch(e){console.warn('Biographie non chargée',e);}
+ try{
+  const response=await fetch('/api/media');if(!response.ok)return;
+  const posts=(await response.json()).posts||[],root=document.querySelector('#media-list');if(!root||!posts.length)return;
+  root.innerHTML=posts.map(p=>{
+   let visual='';
+   if(p.kind==='photo'&&p.media_url)visual='<img loading="lazy" src="'+esc(p.media_url)+'" alt="'+esc(p.title)+'">';
+   else if(p.kind==='video'&&p.media_url)visual='<video controls preload="metadata" src="'+esc(p.media_url)+'"></video>';
+   const label=p.kind==='news'?'ACTUALITÉ':p.kind==='event'?'ÉVÉNEMENT':p.kind==='video'?'VIDÉO':'PHOTO';
+   return '<article class="media-card">'+visual+'<div class="media-card-copy"><small>'+label+'</small><h3>'+esc(p.title)+'</h3>'+(p.description?'<p>'+esc(p.description)+'</p>':'')+'</div></article>';
+  }).join('');
+ }catch(e){console.warn('Médias non chargés',e);}
+})();
