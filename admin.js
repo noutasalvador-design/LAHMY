@@ -76,6 +76,7 @@ $('#photos-form').addEventListener('submit',async e=>{
   const updates={};
   if(hero){const blob=await upload(Date.now()+'-lahmy-hero-'+hero.name.replace(/[^a-zA-Z0-9._-]/g,'-'),hero,{access:'public',handleUploadUrl:'/api/upload',clientPayload:JSON.stringify({kind:'media'})});updates.hero_photo_url=blob.url;}
   if(artist){const blob=await upload(Date.now()+'-lahmy-artist-'+artist.name.replace(/[^a-zA-Z0-9._-]/g,'-'),artist,{access:'public',handleUploadUrl:'/api/upload',clientPayload:JSON.stringify({kind:'media'})});updates.artist_photo_url=blob.url;}
+  if(musicCover){const blob=await upload(Date.now()+'-lahmy-music-cover-'+musicCover.name.replace(/[^a-zA-Z0-9._-]/g,'-'),musicCover,{access:'public',handleUploadUrl:'/api/upload',clientPayload:JSON.stringify({kind:'media'})});updates.music_cover_url=blob.url;}
   say('#photos-status','Enregistrement des photos…');
   await api('/api/content',{method:'PATCH',body:JSON.stringify(updates)});
   if(updates.hero_photo_url)$('#hero-photo-preview').src=updates.hero_photo_url;
@@ -97,3 +98,18 @@ document.querySelectorAll('.admin-tab[data-view]').forEach(button=>button.addEve
 
 
 $('#reels-form').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.currentTarget),url=String(f.get('reel_url')||'').trim(),title=String(f.get('reel_title')||'').trim();let parsed;try{parsed=new URL(url);}catch{say('#reels-status','Collez un lien valide.');return;}const host=parsed.hostname.toLowerCase().replace(/^www\./,'');if(!['youtube.com','m.youtube.com','youtu.be','instagram.com','tiktok.com'].some(d=>host===d||host.endsWith('.'+d))){say('#reels-status','Lien non pris en charge. Utilisez YouTube Shorts, Instagram Reels ou TikTok.');return;}try{const current=await api('/api/content'),list=parseReels(current.content.reels_json);if(list.some(r=>r.url===url)){say('#reels-status','Ce lien est déjà enregistré.');return;}list.push({url,title:title||'LAHMY · Reel / Short'});await saveReels(list,'Reel enregistré. Il apparaîtra sur le site après actualisation.');e.currentTarget.reset();}catch(err){say('#reels-status','Échec : '+err.message);}});
+
+
+// Export CSV des statistiques pour archivage ou partage.
+$('#export-stats').addEventListener('click',async()=>{
+ const button=$('#export-stats');button.disabled=true;say('#stats-status','Préparation du fichier CSV…');
+ try{
+  const data=await api('/api/events');
+  const totals=Object.fromEntries((data.totals||[]).map(x=>[x.event_type,x.total]));
+  const rows=[['Type','Titre','Nombre'],['Écoutes','Tous les titres',Number(totals.play||0)],['Téléchargements','Tous les titres',Number(totals.download||0)]];
+  (data.tracks||[]).forEach(t=>{rows.push(['Écoutes',t.title,Number(t.plays||0)]);rows.push(['Téléchargements',t.title,Number(t.downloads||0)]);});
+  const csv='\\uFEFF'+rows.map(row=>row.map(value=>'"'+String(value??'').replace(/"/g,'""')+'"').join(';')).join('\\r\\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+  link.href=url;link.download='lahmy-statistiques-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);say('#stats-status','Export CSV préparé.');
+ }catch(err){say('#stats-status','Échec de l’export : '+err.message);}finally{button.disabled=false;}
+});
