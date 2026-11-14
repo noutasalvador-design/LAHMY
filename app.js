@@ -18,6 +18,7 @@ const contactForm=document.querySelector('#contact-form');if(contactForm){contac
   if(!response.ok)return;
   const data=await response.json();tracks=data.releases||[];playlistTracks=tracks;
   if(!tracks.length)return;
+  document.querySelector('.player')?.classList.add('has-tracks');
   selectPlayerTrack(tracks[0]);
   list.innerHTML='<h3 class="release-title">SORTIES OFFICIELLES</h3>'+tracks.map((t,i)=>'<article class="release-item">'+(t.cover_url?'<img class="release-cover" src="'+esc(t.cover_url)+'" alt="Pochette de '+esc(t.title)+'" loading="lazy">':'<div class="release-cover release-placeholder">L.</div>')+'<div class="release-details"><strong>'+esc(t.title)+'</strong><small>'+esc(t.release_type)+' · '+esc(t.genre||'LAHMY')+(t.release_date?' · '+esc(t.release_date):'')+'</small>'+(t.description?'<p>'+esc(t.description)+'</p>':'')+'</div><div class="release-actions"><button type="button" data-play-track="'+i+'">▶ ÉCOUTER</button><a data-download-track="'+i+'" href="'+esc(t.audio_url)+'" download>TÉLÉCHARGER ↗</a></div></article>').join('');
   list.querySelectorAll('[data-play-track]').forEach(button=>button.addEventListener('click',async()=>{
@@ -49,7 +50,15 @@ const contactForm=document.querySelector('#contact-form');if(contactForm){contac
    if(artistPhoto&&typeof data.artist_photo_url==='string'&&/^https:\/\//i.test(data.artist_photo_url))artistPhoto.src=data.artist_photo_url;
     if(musicCover&&typeof data.music_cover_url==='string'&&/^https:\/\//i.test(data.music_cover_url))musicCover.src=data.music_cover_url;
    const bio=document.querySelector('.bio-copy');
-   if(bio){if(data.bio_fr){bio.dataset.fr=data.bio_fr;}if(data.bio_en){bio.dataset.en=data.bio_en;}bio.textContent=(typeof lang!=='undefined'&&lang==='en'&&data.bio_en)?data.bio_en:(data.bio_fr||bio.dataset.fr||bio.textContent);}
+   if(bio){
+    const fallbackBio="Artiste-musicien et auteur-compositeur originaire de Porto-Novo, Lahmy redéfinit les codes de l'afro-romantique au Bénin. Son univers se distingue par une plume poétique et élégante, portée par la douceur de sa voix.\n\nAvant de dévoiler ses propres compositions, il a marqué les réseaux sociaux à travers sa série de réécritures conceptuelles « Si c’était moi ». Le premier volume sur Fitè de Vano Baby a cumulé plus de 100 000 vues, suivi par sa reprise de Kimi d'Axel Merryl qui a définitivement installé sa signature vocale et visuelle.\n\nAujourd'hui, son ambition est claire : briser la routine de l'industrie classique pour imposer une identité musicale unique avec son projet Hagbè Lover.";
+    const previousBio="Originaire de Porto-Novo au Bénin, LAHMY est un artiste béninois, auteur-compositeur-interprète qui façonne un univers musical personnel porté par les émotions, les mots et les mélodies. À la rencontre de la musique afro-romantique, de l’afro love et des sonorités urbaines, ses chansons racontent une part de son histoire et s’inscrivent dans la nouvelle scène musicale béninoise.";
+    const bioFr=(data.bio_fr&&data.bio_fr!==previousBio&&!data.bio_fr.includes('**'))?data.bio_fr:fallbackBio;
+    bio.dataset.fr=bioFr;
+    if(data.bio_en)bio.dataset.en=data.bio_en;
+    const activeBio=(typeof lang!=='undefined'&&lang==='en'&&data.bio_en)?data.bio_en:bioFr;
+    bio.replaceChildren(...activeBio.split(/\n\s*\n/).map(paragraph=>{const p=document.createElement('p');p.textContent=paragraph.replace(/\*{1,2}/g,'').trim();return p;}));
+   }
    if(typeof data.reels_json==='string'&&data.reels_json.trim()){
     try{
      const reels=JSON.parse(data.reels_json);
