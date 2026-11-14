@@ -85,3 +85,14 @@ html[data-theme="light"] .admin{color:var(--accent)}
 
 /* Crédits et contact du développeur dans le pied de page */
 .footer-credit{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:11px;line-height:1.7;letter-spacing:.04em;color:var(--muted,#a7b0bd)}.footer-credit strong{color:var(--text,#fff);font-weight:800}.footer-credit a{color:var(--accent,#c8f169);text-decoration:none;transition:color .2s ease}.footer-credit a:hover{color:var(--text,#fff)}footer{gap:20px;flex-wrap:wrap}@media(max-width:680px){.footer-credit{order:3;width:100%;padding-top:8px}.footer-credit span:last-child{max-width:100%;overflow-wrap:anywhere}footer{justify-content:center;text-align:center}}
+
+
+/* Mobile readability: biography paragraphs and upcoming release state */
+.bio-copy{max-width:100%;min-width:0;overflow-wrap:anywhere;}
+.bio-copy p{max-width:470px;color:#a6b0c2;line-height:1.9;font-size:13px;margin:0;overflow-wrap:anywhere;}
+.bio-copy p+p{margin-top:18px;}
+.player:not(.has-tracks) .track button,.player:not(.has-tracks) .sound,.player:not(.has-tracks) .seek,.player:not(.has-tracks) .controls{display:none!important;}
+.player:not(.has-tracks) .track{padding:28px 0 18px;}
+.player:not(.has-tracks) .track strong{font-size:clamp(13px,2vw,17px);line-height:1.45;white-space:normal;overflow-wrap:anywhere;}
+.player:not(.has-tracks) .hint{margin-top:10px;line-height:1.8;}
+@media(max-width:650px){.bio-copy p{font-size:13px;line-height:1.85;}.bio-copy p+p{margin-top:16px;}.player:not(.has-tracks) .track{gap:0;}}
